@@ -28,7 +28,7 @@ class _DeepArPreviewState extends State<DeepArPreview> {
   Widget _iOSView() {
     return widget.deepArController.buildPreview(oniOSViewCreated: () {
       widget.onViewCreated?.call();
-      setState(() {});
+      //  setState(() {});
     });
   }
 
