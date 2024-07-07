@@ -26,12 +26,10 @@ class _DeepArPreviewState extends State<DeepArPreview> {
   }
 
   Widget _iOSView() {
-    return widget.deepArController.isInitialized
-        ? widget.deepArController.buildPreview(oniOSViewCreated: () {
-            widget.onViewCreated?.call();
-            setState(() {});
-          })
-        : const SizedBox.shrink();
+    return widget.deepArController.buildPreview(oniOSViewCreated: () {
+      widget.onViewCreated?.call();
+      //  setState(() {});
+    });
   }
 
   Widget _androidView() {
