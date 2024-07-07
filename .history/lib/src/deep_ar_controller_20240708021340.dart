@@ -13,7 +13,7 @@ import 'utils.dart';
 /// Controls all interaction with DeepAR Sdk.
 class DeepArController {
   late final DeepArPlatformHandler _deepArPlatformHandler;
-  Resolution _resolution = Resolution.high;
+  Resolution? _resolution = Resolution.high;
 
   int? _textureId;
   Size? _imageSize;

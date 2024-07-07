@@ -1,19 +1,18 @@
 import 'dart:io';
-
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:vector_math/vector_math_64.dart' as vector;
 
+import 'resolution_preset.dart';
 import 'deep_ar_platform_handler.dart';
 import 'platform_strings.dart';
-import 'resolution_preset.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'utils.dart';
+import 'package:vector_math/vector_math_64.dart' as vector;
 
 /// Controls all interaction with DeepAR Sdk.
 class DeepArController {
   late final DeepArPlatformHandler _deepArPlatformHandler;
-  Resolution _resolution = Resolution.high;
+  late final Resolution _resolution;
 
   int? _textureId;
   Size? _imageSize;
