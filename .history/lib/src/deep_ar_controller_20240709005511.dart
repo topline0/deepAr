@@ -289,11 +289,12 @@ class DeepArController {
   }
 
   ///Toggles flash and returns its status
-  Future<void> toggleFlash(void Function(bool) onCallBack) async {
+  Future<bool> toggleFlash(void Function(bool) onCallBack) async {
     bool result = await platformRun(
         androidFunction: _deepArPlatformHandler.toggleFlash,
         iOSFunction: () => _deepArPlatformHandler.toggleFlashIos(_textureId!));
     onCallBack.call(result);
+    return result;
   }
 
   ///Fire named trigger of an fbx animation set on the currently loaded effect.

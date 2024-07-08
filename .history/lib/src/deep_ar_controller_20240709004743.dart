@@ -20,7 +20,7 @@ class DeepArController {
   double? _aspectRatio;
   bool _hasPermission = false;
   String? _iosLicenseKey;
-  bool _isRecording = false;
+  // bool _isRecording = false;
 
   CameraDirection _cameraDirection = CameraDirection.front;
   // bool _flashState = false;
@@ -42,10 +42,10 @@ class DeepArController {
   ///For [iOS], please call the function after [DeepArPreview] widget has been built.
   double get aspectRatio => _aspectRatio ?? 1.0;
 
-  ///Return true if the recording is in progress.
-  bool get isRecording => _isRecording;
+  // ///Return true if the recording is in progress.
+  // bool get isRecording => _isRecording;
 
-  ///Get current flash state as [FlashState.on] or [FlashState.off]
+  // ///Get current flash state as [FlashState.on] or [FlashState.off]
   // bool get flashState => _flashState;
 
   ///Size of the preview image
@@ -142,15 +142,16 @@ class DeepArController {
   }
 
   ///Starts recording video
-  Future<void> startVideoRecording() async {
-    if (_isRecording) throw ("Recording already in progress");
+  Future<bool> startVideoRecording(isRecording) async {
+    if (isRecording) throw ("Recording already in progress");
     if (Platform.isAndroid) {
       _deepArPlatformHandler.startRecordingVideoAndroid();
-      _isRecording = true;
+      isRecording = true;
     } else {
       _deepArPlatformHandler.startRecordingVideoIos(_textureId!);
-      _isRecording = true;
+      isRecording = true;
     }
+    return isRecording;
   }
 
   ///Stop recording video
@@ -275,7 +276,7 @@ class DeepArController {
   }
 
   ///Flips Camera and return the current direction
-  Future<CameraDirection> flipCamera(void Function(bool) onCallBack) async {
+  Future<CameraDirection> flipCamera() async {
     final result = await platformRun(
         androidFunction: _deepArPlatformHandler.flipCamera,
         iOSFunction: () => _deepArPlatformHandler.flipCameraIos(_textureId!));
@@ -283,17 +284,18 @@ class DeepArController {
       _cameraDirection = _cameraDirection == CameraDirection.front
           ? CameraDirection.rear
           : CameraDirection.front;
-      if (_cameraDirection == CameraDirection.front) onCallBack.call(false);
+      if (_cameraDirection == CameraDirection.front) _flashState = false;
     }
     return _cameraDirection;
   }
 
   ///Toggles flash and returns its status
-  Future<void> toggleFlash(void Function(bool) onCallBack) async {
+  Future<bool> toggleFlash() async {
     bool result = await platformRun(
         androidFunction: _deepArPlatformHandler.toggleFlash,
         iOSFunction: () => _deepArPlatformHandler.toggleFlashIos(_textureId!));
-    onCallBack.call(result);
+    _flashState = result;
+    return _flashState;
   }
 
   ///Fire named trigger of an fbx animation set on the currently loaded effect.

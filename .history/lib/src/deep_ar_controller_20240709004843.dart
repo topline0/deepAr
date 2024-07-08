@@ -46,7 +46,7 @@ class DeepArController {
   bool get isRecording => _isRecording;
 
   ///Get current flash state as [FlashState.on] or [FlashState.off]
-  // bool get flashState => _flashState;
+  bool get flashState => _flashState;
 
   ///Size of the preview image
   ///
@@ -275,7 +275,7 @@ class DeepArController {
   }
 
   ///Flips Camera and return the current direction
-  Future<CameraDirection> flipCamera(void Function(bool) onCallBack) async {
+  Future<CameraDirection> flipCamera() async {
     final result = await platformRun(
         androidFunction: _deepArPlatformHandler.flipCamera,
         iOSFunction: () => _deepArPlatformHandler.flipCameraIos(_textureId!));
@@ -283,17 +283,18 @@ class DeepArController {
       _cameraDirection = _cameraDirection == CameraDirection.front
           ? CameraDirection.rear
           : CameraDirection.front;
-      if (_cameraDirection == CameraDirection.front) onCallBack.call(false);
+      if (_cameraDirection == CameraDirection.front) _flashState = false;
     }
     return _cameraDirection;
   }
 
   ///Toggles flash and returns its status
-  Future<void> toggleFlash(void Function(bool) onCallBack) async {
+  Future<bool> toggleFlash() async {
     bool result = await platformRun(
         androidFunction: _deepArPlatformHandler.toggleFlash,
         iOSFunction: () => _deepArPlatformHandler.toggleFlashIos(_textureId!));
-    onCallBack.call(result);
+    _flashState = result;
+    return _flashState;
   }
 
   ///Fire named trigger of an fbx animation set on the currently loaded effect.
